@@ -6,11 +6,6 @@ import SignUp from "./screens/SignUp";
 import ResetPassword from "./screens/ResetPassword";
 import Home from "./components/Home";
 
-
-
-
-
-
 const Stack = createStackNavigator();
 
 export default function App() {

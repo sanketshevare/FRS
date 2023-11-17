@@ -4,11 +4,12 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  KeyboardAvoidingViewBase,
+  ActivityIndicator,
+  Button
 } from "react-native";
 import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { app, auth } from "../firebase"; // Import the app from the firebase.js file
 import { CommonActions } from "@react-navigation/native";
 
@@ -44,12 +45,17 @@ const SignIn = () => {
         setError("");
       }, 2000);
     } finally {
-      setLoading(false); // Reset loading state regardless of success or failure
+      setLoading(false);
     }
   }
 
   return (
     <View style={tw`flex items-center justify-center h-full p-3`}>
+      <View style={tw`z-10 top-40`}>
+        {loading && (
+          <ActivityIndicator size="large" color="#000000" />
+        )}
+      </View>
       <View>
         <Text style={tw`text-2xl text-gray-700`}>SignIn</Text>
       </View>
@@ -69,12 +75,13 @@ const SignIn = () => {
       <TextInput
         placeholder="Password"
         style={tw`border border-gray-400 bg-gray-100 p-3 m-1 w-full web:w-98 rounded-md`}
+        secureTextEntry={true}
         value={password}
         onChangeText={(e) => setPassword(e)}
       />
 
       <TouchableOpacity
-        style={tw`m-1 text-right`}
+        style={tw`m-1`}
         onPress={() => navigation.navigate("ResetPassword")}
       >
         <Text>Forgot Password?</Text>

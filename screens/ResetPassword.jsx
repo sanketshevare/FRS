@@ -21,8 +21,9 @@ const ResetPassword = () => {
   };
 
   return (
-    <View>
-      <Text>ResetPassword</Text>
+    <View style={tw`flex items-center justify-center h-full p-3`}>
+      
+      <Text style={tw`text-lg`}>Reset Your Password</Text>
       <TextInput
         placeholder="Email"
         style={tw`border border-gray-400 bg-gray-100 p-3 m-1 w-full web:w-98 rounded-md`}
@@ -34,7 +35,7 @@ const ResetPassword = () => {
         style={tw`p-3 bg-red-200 m-1 rounded-md`}
         onPress={handleForgotPassword} 
       >
-        <Text>Reset Password</Text>
+        <Text>Get Reset Link</Text>
       </TouchableOpacity>
     </View>
   );
