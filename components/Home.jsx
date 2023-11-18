@@ -3,21 +3,12 @@ import { View, Text, TouchableOpacity } from "react-native";
 import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import {
-  Button,
-  Container,
-  Footer,
-  Icon,
-  Content,
-  FooterTab,
-  Header,
-  NativeBaseProvider,
-} from "native-base";
 import { Ionicons } from "@expo/vector-icons";
 import Search from "./footer/Search";
 import Calendar from "./footer/Calendar";
 import Settings from "./footer/Settings";
-import Splash from "./footer/Splash"
+import Splash from "./footer/Splash";
+import Profile from "./footer/Profile";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
@@ -52,51 +43,61 @@ const Home = () => {
   }, [navigation]);
 
   return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+    <>
+      <View style={tw`w-full bg-blue-100 h-15 shadow-lg justify-center sticky z-10 top-8`}>
+        <Text style={tw`text-slate-800 font-bold text-2xl p-3`}>FRS</Text>
+      </View>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
 
-          if (route.name === "Search") {
-            iconName = focused
-              ? "ios-search"
-              : "ios-search-outline";
-          } else if (route.name === "Settings") {
-            iconName = focused ? "ios-settings" : "ios-settings-outline";
-          } else if (route.name === "Calendar") {
-            iconName = focused ? "ios-calendar" : "ios-calendar-outline";
-          } else if (route.name === "Home") {
-            iconName = focused ? "ios-home" : "ios-home-outline";
-          }
+            if (route.name === "Search") {
+              iconName = focused ? "ios-search" : "ios-search-outline";
+            } else if (route.name === "Settings") {
+              iconName = focused ? "ios-settings" : "ios-settings-outline";
+            } else if (route.name === "Calendar") {
+              iconName = focused ? "ios-calendar" : "ios-calendar-outline";
+            } else if (route.name === "Home") {
+              iconName = focused ? "ios-home" : "ios-home-outline";
+            }  else if (route.name === "Profile") {
+              iconName = focused ? "ios-person" : "ios-person-outline";
+            }
 
-          // You can return any component that you like here!
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: "tomato",
-        tabBarInactiveTintColor: "gray",
-      })}
-    >
-      <Tab.Screen
-        name="Home"
-        component={Splash}
-        options={{ headerShown: false }}
-      />
+            // You can return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: "tomato",
+          tabBarInactiveTintColor: "gray",
+        })}
+      >
         <Tab.Screen
-        name="Search"
-        component={Search}
-        options={{ headerShown: false }}
-      />
-      <Tab.Screen
-        name="Calendar"
-        component={Calendar}
-        options={{ headerShown: false }}
-      />
-       <Tab.Screen
-        name="Settings"
-        component={Settings}
-        options={{ headerShown: false }}
-      />
-    </Tab.Navigator>
+          name="Home"
+          component={Splash}
+          options={{ headerShown: false }}
+        />
+        <Tab.Screen
+          name="Search"
+          component={Search}
+          options={{ headerShown: false }}
+        />
+        <Tab.Screen
+          name="Calendar"
+          component={Calendar}
+          options={{ headerShown: false }}
+        />
+          <Tab.Screen
+          name="Profile"
+          component={Profile}
+          options={{ headerShown: false }}
+        />
+        <Tab.Screen
+          name="Settings"
+          component={Settings}
+          options={{ headerShown: false }}
+        />
+      </Tab.Navigator>
+    </>
   );
 };
 

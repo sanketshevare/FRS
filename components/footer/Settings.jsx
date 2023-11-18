@@ -36,7 +36,7 @@ const Settings = () => {
   return (
     <View style={tw`flex items-center justify-center h-full `}>
       <Text>Settings</Text>
-      <TouchableOpacity onPress={() => handleSignOut()}>
+      <TouchableOpacity style={tw`p-3 rounded-xl w-full bg-red-300`} onPress={() => handleSignOut()}>
         <Text>SignOut</Text>
       </TouchableOpacity>
     </View>

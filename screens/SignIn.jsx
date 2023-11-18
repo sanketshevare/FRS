@@ -5,7 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
-  Button
+  Button,
 } from "react-native";
 import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
@@ -39,7 +39,8 @@ const SignIn = () => {
 
       const user = credentials.user;
     } catch (error) {
-      setError(error.message);
+      let err = error.message.split(":");
+      setError(err[1]);
 
       setTimeout(() => {
         setError("");
@@ -52,9 +53,7 @@ const SignIn = () => {
   return (
     <View style={tw`flex items-center justify-center h-full p-3`}>
       <View style={tw`z-10 top-40`}>
-        {loading && (
-          <ActivityIndicator size="large" color="#000000" />
-        )}
+        {loading && <ActivityIndicator size="large" color="#000000" />}
       </View>
       <View>
         <Text style={tw`text-2xl text-gray-700`}>SignIn</Text>

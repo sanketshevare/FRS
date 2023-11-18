@@ -32,8 +32,8 @@ const SignUp = () => {
       );
       const user = credentials.user;
     } catch (error) {
-      setError(error.message);
-
+      let err = error.message.split(":");
+      setError(err[1]);
       setTimeout(() => {
         setError("");
       }, 2000);
