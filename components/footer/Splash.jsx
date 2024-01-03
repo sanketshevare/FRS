@@ -10,9 +10,14 @@ import {
 import tw from "twrnc";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
-import Carousel from "react-native-snap-carousel";
-import { Ionicons } from "@expo/vector-icons";
-import { ScrollView } from "react-native-gesture-handler";
+import Animated, {
+  useSharedValue,
+  withSpring,
+  withTiming,
+  useAnimatedStyle,
+  useAnimatedGestureHandler,
+} from "react-native-reanimated";
+import { ScrollView, PinchGestureHandler, State } from "react-native-gesture-handler";
 
 const data = [
   {
@@ -35,6 +40,7 @@ const data = [
 const windowWidth = Dimensions.get("window").width;
 const sliderWidth = Dimensions.get("window").width + 80;
 const itemWidth = Math.round(sliderWidth * 0.7);
+
 const Splash = () => {
   const auth = getAuth();
   const navigation = useNavigation();
@@ -49,33 +55,42 @@ const Splash = () => {
     return () => unsubscribe();
   }, []);
 
-  const _renderItem = ({ item }) => {
-    return (
-      <View style={tw`flex items-center right-10 top-8`}>
-        <Image source={{ uri: item.imageUrl }} style={tw`h-54 w-100`} />
-        <Text style={tw`z-10 bottom-30 text-xl text-white font-bold`}>
-          {item.title}
-        </Text>
-      </View>
-    );
-  };
+  const translateX = useSharedValue(0);
+
+  const gestureHandler = useAnimatedGestureHandler({
+    onStart: (_, ctx) => {
+      ctx.startX = translateX.value;
+    },
+    onActive: (event, ctx) => {
+      translateX.value = ctx.startX + event.translationX;
+    },
+    onEnd: (event) => {
+      const screenWidth = Dimensions.get("window").width;
+      const index = Math.round(translateX.value / screenWidth);
+
+      translateX.value = withSpring(index * screenWidth, { velocity: event.velocityX });
+    },
+  });
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: translateX.value }],
+    };
+  });
 
   return (
-    <ScrollView style={tw`h-full bg-red-200`}>
-     
-      <View style={tw`flex items-center w-full bg-blue-100`}>
-        <View style={tw`w-full`}>
-          <Carousel
-            data={data}
-            renderItem={_renderItem}
-            sliderWidth={sliderWidth}
-            itemWidth={itemWidth}
-            autoplay={true}
-            autoplayInterval={5000} // Set the interval for auto-sliding (in milliseconds)
-            loop={true} // Enable looping of carousel items
-            layout="default"
-          />
-        </View>
+    <ScrollView style={tw`h-full`}>
+      <View style={tw`flex items-center w-full`}>
+        <PinchGestureHandler>
+          <Animated.View style={[{ flexDirection: "row" }, animatedStyle]}>
+            {data.map((item, index) => (
+              <View key={index} style={{ width: Dimensions.get("window").width }}>
+                <Image source={{ uri: item.imageUrl }} style={tw`aspect-3/4`} />
+                <Text style={{ position: "absolute", bottom: 30, left: 10, color: "white", fontSize: 20, fontWeight: "bold" }}>{item.title}</Text>
+              </View>
+            ))}
+          </Animated.View>
+        </PinchGestureHandler>
 
         <View style={tw`bg-yellow-200 h-auto`}>
           {user ? (
@@ -93,8 +108,6 @@ const Splash = () => {
         </View>
         <Text style={tw`h-100`}></Text>
         <Text style={tw`h-100`}></Text>
-
-        
       </View>
     </ScrollView>
   );

@@ -13,27 +13,45 @@ import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import tw from "twrnc";
 import { Ionicons } from "@expo/vector-icons";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { useAuth } from "../../config/AuthContext";
 
 const Search = () => {
   const [image, setImage] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const auth = getAuth();
+  const { accessToken } = useAuth();
 
-  useEffect( ()=> {
-    if(image == null){
-      setInterval( () => {
+console.log("MYTOKEN: "+accessToken);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        // User is logged in
+        // navigation.navigate("Home");
         setRecommendations([]);
-      }, 50000)
-    }
-  },[image])
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // useEffect( ()=> {
+  //   if(image == null){
+  //     setInterval( () => {
+  //       setRecommendations([]);
+  //     }, 50000)
+  //   }
+  // },[image])
+
   const pickImage = async () => {
     setLoading(true);
 
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
+      allowsEditing: false,
+      // aspect: [4, 3],
       quality: 1,
     });
 
@@ -57,15 +75,19 @@ const Search = () => {
 
     try {
       const response = await axios.post(
-        "http://192.168.1.2:5000/recommend",
+        // "http://64.227.147.139:8000/api/recommend",
+        "http://192.168.1.7:8000/api/recommend",
+        // "http://192.168.1.2:5000/recommend",
+
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            "Authorization": "JWT " + accessToken,
           },
         }
       );
-      console.log(response.data.recommendations);
+      // console.log(response.data.recommendations);
       setRecommendations(response.data.recommendations);
     } catch (error) {
       console.error("Error fetching recommendations:", error);
@@ -81,23 +103,18 @@ const Search = () => {
   const decodedImages = recommendations.map(decodeBase64Image);
 
   return (
-    <ScrollView style={tw`h-full bg-red-200 top-8`}>
-   
-
-      <View style={tw`z-10 top-40`}>
+    <ScrollView style={tw`h-full bg-slate-700 top-8 w-full`}>
+      <View style={tw`z-30`}>
         {loading && <ActivityIndicator size="large" color="#000000" />}
       </View>
 
-      
-      <View style={tw`flex items-center justify-center h-full `}>
-      <Text
-        style={tw`text-lg mb-auto font-bold text-center bg-blue-200 w-full`}
-      >
-        Search Product
-      </Text>
+      <View style={tw`flex items-center justify-center h-full`}>
+        <Text style={tw`text-lg font-bold text-center bg-blue-200 w-full h-8`}>
+          Search Product
+        </Text>
         {image == null ? (
           <View
-            style={tw`items-center justify-center bg-slate-300 w-full h-60`}
+            style={tw`items-center justify-center bg-slate-300 w-full h-60 `}
           >
             <TouchableOpacity style={tw`items-center`}>
               <Ionicons
@@ -111,12 +128,20 @@ const Search = () => {
             {/* <Button title="Pick an image from gallery" onPress={pickImage} /> */}
           </View>
         ) : (
-          <ImageBackground source={{ uri: image }} style={tw`w-full h-60`}>
+          <ImageBackground
+            source={{ uri: image }}
+            style={tw`w-full h-100`}
+            resizeMode="cover"
+          >
             <TouchableOpacity
               style={tw`p-3 pt-1 ml-auto`}
               onPress={() => setImage(null)}
             >
-              <Ionicons name={"close-circle-outline"} color={"white"} size={40} />
+              <Ionicons
+                name={"close-circle-outline"}
+                color={"black"}
+                size={40}
+              />
             </TouchableOpacity>
           </ImageBackground>
         )}
@@ -129,12 +154,27 @@ const Search = () => {
             <Text style={tw`font-bold`}>Recommend Me</Text>
           </TouchableOpacity>
         )}
-        {recommendations.length > 0 && (
-          <View style={tw`flex gap-2`}>
+
+        {recommendations.length > 0 ? (
+          <View style={tw`flex gap-1 `}>
+            {/* <View style={tw`bg-red-100 p-2 w-full `}> */}
+            <Text style={tw`text-center text-lg`}>
+              Your Recommendaions:
+            </Text>
+            {/* </View> */}
             {/* <Text>Top 5 Recommendations:</Text> */}
             {decodedImages.map((rec, index) => (
-              <Image key={index} source={{ uri: rec }} style={tw`h-54 w-50`} />
+              <Image
+                key={index}
+                source={{ uri: rec }}
+                style={tw`h-100 w-100`}
+                resizeMode="cover"
+              />
             ))}
+          </View>
+        ) : (
+          <View style={tw`flex items-center justify-center h-100`}>
+            <Text style={tw`text-gray-400`}>Your Recommendations will appears here!</Text>
           </View>
         )}
       </View>

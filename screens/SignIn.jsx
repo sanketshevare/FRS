@@ -12,43 +12,58 @@ import { useNavigation } from "@react-navigation/native";
 import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { app, auth } from "../firebase"; // Import the app from the firebase.js file
 import { CommonActions } from "@react-navigation/native";
+import axios from "axios";
+import { useAuth } from "../config/AuthContext";
+
 
 const SignIn = () => {
   const navigation = useNavigation();
+  const { setToken } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function signInWithEmail() {
-    setLoading(true);
+
+
+  
+  const handleLogin = async () => {
     try {
-      const credentials = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      navigation.navigate("Home");
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: "Home" }],
-        })
+      const response = await axios.post(
+        "http://192.168.1.7:8000/api/token/",
+        {
+          username: email,
+          password: password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
 
-      const user = credentials.user;
+      console.log("Access Token:", response.data.access);
+      setToken(response.data.access);
+      
+
+      // Navigate to the home screen or perform other actions upon successful login
+      navigation.navigate("Home");
+      // navigation.dispatch(
+      //   CommonActions.reset({
+      //     index: 0,
+      //     routes: [{ name: "Home" }],
+      //   })
+      // );
     } catch (error) {
-      let err = error.message.split(":");
-      setError(err[1]);
+      console.error("Error:", error);
+      setError("Invalid Username/Password!");
 
       setTimeout(() => {
         setError("");
       }, 2000);
-    } finally {
-      setLoading(false);
     }
-  }
+  };
 
   return (
     <View style={tw`flex items-center justify-center h-full p-3`}>
@@ -78,7 +93,6 @@ const SignIn = () => {
         value={password}
         onChangeText={(e) => setPassword(e)}
       />
-
       <TouchableOpacity
         style={tw`m-1`}
         onPress={() => navigation.navigate("ResetPassword")}
@@ -88,13 +102,11 @@ const SignIn = () => {
 
       <TouchableOpacity
         style={tw`p-3 bg-red-200 m-1 rounded-md`}
-        onPress={() => signInWithEmail()}
+        onPress={() => handleLogin()}
       >
         <Text>SignIn</Text>
       </TouchableOpacity>
-
       <Text>Don't have an account yet?</Text>
-
       <TouchableOpacity
         style={tw`p-3 bg-red-200 m-1 rounded-md`}
         onPress={() => navigation.navigate("SignUp")}
