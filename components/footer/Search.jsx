@@ -76,8 +76,8 @@ console.log("MYTOKEN: "+accessToken);
     try {
       const response = await axios.post(
         // "http://64.227.147.139:8000/api/recommend",
-        "http://192.168.1.7:8000/api/recommend",
-        // "http://192.168.1.2:5000/recommend",
+        // "http://192.168.1.7:8000/api/recommend",
+        "http://192.168.88.245:8000/api/recommend",
 
         formData,
         {
@@ -103,13 +103,13 @@ console.log("MYTOKEN: "+accessToken);
   const decodedImages = recommendations.map(decodeBase64Image);
 
   return (
-    <ScrollView style={tw`h-full bg-slate-700 top-8 w-full`}>
-      <View style={tw`z-30`}>
+    <ScrollView style={tw`h-full bg-slate-700 top-4 w-full`}>
+      <View style={tw`z-30 sticky top-3`}>
         {loading && <ActivityIndicator size="large" color="#000000" />}
       </View>
 
       <View style={tw`flex items-center justify-center h-full`}>
-        <Text style={tw`text-lg font-bold text-center bg-blue-200 w-full h-8`}>
+        <Text style={tw`text-lg font-bold text-center bg-blue-200 w-full h-8 p-1`}>
           Search Product
         </Text>
         {image == null ? (

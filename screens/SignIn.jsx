@@ -29,9 +29,10 @@ const SignIn = () => {
 
   
   const handleLogin = async () => {
+    setLoading(true);
     try {
       const response = await axios.post(
-        "http://192.168.1.7:8000/api/token/",
+        "http://192.168.88.245:8000/api/token/",
         {
           username: email,
           password: password,
@@ -45,18 +46,19 @@ const SignIn = () => {
 
       console.log("Access Token:", response.data.access);
       setToken(response.data.access);
-      
+      setLoading(false);
+      navigation.navigate("Home");
 
       // Navigate to the home screen or perform other actions upon successful login
-      navigation.navigate("Home");
       // navigation.dispatch(
       //   CommonActions.reset({
-      //     index: 0,
+      //     // index: 0,
       //     routes: [{ name: "Home" }],
       //   })
       // );
     } catch (error) {
       console.error("Error:", error);
+      setLoading(false);
       setError("Invalid Username/Password!");
 
       setTimeout(() => {

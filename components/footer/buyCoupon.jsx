@@ -6,20 +6,20 @@ import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useAuth } from "../../config/AuthContext";
 
-const Settings = () => {
+const BuyCoupoun = () => {
 
-  const navigation = useNavigation();
-  // const auth = getAuth();
-  const { logout } = useAuth();
+  // const navigation = useNavigation();
+  // // const auth = getAuth();
+  // const { logout } = useAuth();
 
-  const handleSignOut = async () => {
-    try {
-      logout
-      navigation.navigate("Login");
-    } catch (error) {
-      console.error("Sign-out error:", error.message);
-    }
-  };
+  // const handleSignOut = async () => {
+  //   try {
+  //     logout
+  //     navigation.navigate("Login");
+  //   } catch (error) {
+  //     console.error("Sign-out error:", error.message);
+  //   }
+  // };
 
   // useEffect(() => {
   //   const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -37,12 +37,12 @@ const Settings = () => {
 
   return (
     <View style={tw`flex items-center justify-center h-full `}>
-      <Text>Settings</Text>
-      <TouchableOpacity style={tw`p-3 rounded-xl w-full bg-red-300`} onPress={() => handleSignOut()}>
+      <Text>BuyCoupoun</Text>
+      {/* <TouchableOpacity style={tw`p-3 rounded-xl w-full bg-red-300`} onPress={() => handleSignOut()}>
         <Text>SignOut</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };
 
-export default Settings;
+export default BuyCoupoun;

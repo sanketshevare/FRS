@@ -14,9 +14,9 @@ export default function App() {
     <AuthProvider>
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Login" component={SignIn} options={{headerShown: false}}/>
+      <Stack.Screen name="Login" component={SignIn} options={{headerShown: false}}/>
         <Stack.Screen name="SignUp" component={SignUp} />
-        <Stack.Screen name="ResetPassword" component={ResetPassword} />
+        <Stack.Screen name="ResetPassword" component={ResetPassword} /> 
 
         <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
 
