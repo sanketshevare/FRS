@@ -15,16 +15,20 @@ import tw from "twrnc";
 import { Ionicons } from "@expo/vector-icons";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { useAuth } from "../../config/AuthContext";
+import { A } from "@expo/html-elements";
 
 const Search = () => {
   const [image, setImage] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
+  const [metadata, setMetadata] = useState({});
+
   const [loading, setLoading] = useState(false);
 
   const auth = getAuth();
   const { accessToken } = useAuth();
 
-console.log("MYTOKEN: "+accessToken);
+  // console.log("MYTOKEN: " + accessToken);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (!user) {
@@ -77,17 +81,19 @@ console.log("MYTOKEN: "+accessToken);
       const response = await axios.post(
         // "http://64.227.147.139:8000/api/recommend",
         // "http://192.168.1.7:8000/api/recommend",
-        "http://192.168.88.245:8000/api/recommend",
+        "http://192.168.0.101:8000/api/recommend",
 
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            "Authorization": "JWT " + accessToken,
+            Authorization: "JWT " + accessToken,
           },
         }
       );
-      // console.log(response.data.recommendations);
+      // console.log(response.data.metadata);
+      setMetadata(response.data.metadata);
+      console.log("metadata", metadata);
       setRecommendations(response.data.recommendations);
     } catch (error) {
       console.error("Error fetching recommendations:", error);
@@ -103,13 +109,15 @@ console.log("MYTOKEN: "+accessToken);
   const decodedImages = recommendations.map(decodeBase64Image);
 
   return (
-    <ScrollView style={tw`h-full bg-slate-700 top-4 w-full`}>
+    <ScrollView style={tw`h-full top-4 w-full p-1 mb-10`}>
       <View style={tw`z-30 sticky top-3`}>
         {loading && <ActivityIndicator size="large" color="#000000" />}
       </View>
 
       <View style={tw`flex items-center justify-center h-full`}>
-        <Text style={tw`text-lg font-bold text-center bg-blue-200 w-full h-8 p-1`}>
+        <Text
+          style={tw`text-lg font-bold text-center bg-blue-200 w-full h-8 p-1`}
+        >
           Search Product
         </Text>
         {image == null ? (
@@ -156,25 +164,66 @@ console.log("MYTOKEN: "+accessToken);
         )}
 
         {recommendations.length > 0 ? (
-          <View style={tw`flex gap-1 `}>
-            {/* <View style={tw`bg-red-100 p-2 w-full `}> */}
-            <Text style={tw`text-center text-lg`}>
-              Your Recommendaions:
-            </Text>
-            {/* </View> */}
-            {/* <Text>Top 5 Recommendations:</Text> */}
+          <View style={tw`h-screen`}>
+            <Text style={tw`text-center text-lg`}>Your Recommendations:</Text>
+
             {decodedImages.map((rec, index) => (
-              <Image
+              <View
                 key={index}
-                source={{ uri: rec }}
-                style={tw`h-100 w-100`}
-                resizeMode="cover"
-              />
+                style={tw`mb-2 border-2 border-black p-1 shadow-md`}
+              >
+                <Image
+                  source={{ uri: rec }}
+                  style={tw`w-full h-60  `}
+                  resizeMode="contain"
+                />
+
+                {metadata && metadata[index] && (
+                  <View style={tw``}>
+                    <Text style={tw``}>
+                      {metadata[index].product_name} {" | "} Brand:{" "}
+                      {metadata[index].brand}{" "}
+                    </Text>
+
+                    {metadata[index].currency && (
+                      <Text>
+                        Retail Price:{metadata[index].sales_price}{" "}
+                        {metadata[index].currency}{" "}
+                      </Text>
+                    )}
+                    {metadata[index].discount_percentage && (
+                      <Text>
+                        Discounted Price:
+                        {metadata[index].discount_percentage} OFF
+                      </Text>
+                    )}
+
+                    {metadata[index].colour && (
+                      <Text>
+                        Colours:
+                        {metadata[index].colour}
+                      </Text>
+                    )}
+
+                    <Text>
+                      View Product:{" "}
+                      <A
+                        style={tw`text-blue-600`}
+                        href={metadata[index].product_url}
+                      >
+                        {metadata[index].product_url}
+                      </A>
+                    </Text>
+                  </View>
+                )}
+              </View>
             ))}
           </View>
         ) : (
           <View style={tw`flex items-center justify-center h-100`}>
-            <Text style={tw`text-gray-400`}>Your Recommendations will appears here!</Text>
+            <Text style={tw`text-gray-400`}>
+              Your Recommendations will appear here!
+            </Text>
           </View>
         )}
       </View>

@@ -57,7 +57,7 @@ const Splash = () => {
 
   const placeholder = {
     label: "Browse by city",
-    value: "",
+    value: "london",
   };
 
 
@@ -81,10 +81,10 @@ const Splash = () => {
         }
       );
 
-      console.log(
-        "Chicmi API Response mbjsfj,kge   :",
-        response.data.values.events[0]
-      );
+      // console.log(
+      //   "Chicmi API Response mbjsfj,kge   :",
+      //   response.data.values.events[0]
+      // );
       setBlogs(response.data.values.events);
       setLoading(false);
       // console.log("blogs" + blogs[0].summary_en);
@@ -167,6 +167,7 @@ const Splash = () => {
               
             ]}
             onValueChange={(value) => setSelectedCity(value)}
+            // useNativeAndroidPickerStyle={false}
             value={selectedCity || "london"}
             style={{
               inputIOS: {

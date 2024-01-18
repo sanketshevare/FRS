@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator, ImageBackground } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import tw from "twrnc";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
@@ -31,6 +31,10 @@ const ResetPassword = () => {
   };
 
   return (
+    <ImageBackground
+    source={{uri: "https://images.unsplash.com/photo-1436262513933-a0b06755c784?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJhY2tncm91bmQlMjBpbWFnZSUyMGZvcmdvdCUyMHBhc3N3b3JkfGVufDB8fDB8fHww"}}
+    resizeMode="contain"
+    >
     <View style={tw`flex items-center justify-center h-full p-3`}>
       <View style={tw`z-10 top-40`}>
         {loading && <ActivityIndicator size="large" color="#000000" />}
@@ -52,12 +56,13 @@ const ResetPassword = () => {
       ></TextInput>
 
       <TouchableOpacity
-        style={tw`p-3 bg-red-200 m-1 rounded-md`}
+        style={tw`p-3 bg-gray-300 m-1 rounded-md`}
         onPress={handleForgotPassword}
       >
         <Text>Get Reset Link</Text>
       </TouchableOpacity>
     </View>
+    </ImageBackground>
   );
 };
 

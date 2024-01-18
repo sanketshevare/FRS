@@ -5,6 +5,7 @@ import {
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
+  ImageBackground,
 } from "react-native";
 import React from "react";
 import tw from "twrnc";
@@ -43,42 +44,46 @@ const SignUp = () => {
   }
 
   return (
-    <View style={tw`flex items-center justify-center h-full p-3`}>
-      <View style={tw`z-10 top-40`}>
-        {loading && <ActivityIndicator size="large" color="#000000" />}
-      </View>
+    <ImageBackground
+    source={{uri: "https://images.unsplash.com/photo-1506143925201-0252c51780b0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NTZ8fGJhY2tncm91bmQlMjBpbWFnZSUyMHdhcmRyb2JlfGVufDB8fDB8fHww"}}
+    >
+      <View style={tw`flex items-center justify-center h-full p-3`}>
+        <View style={tw`z-10 top-40`}>
+          {loading && <ActivityIndicator size="large" color="#000000" />}
+        </View>
 
-      <View>
-        <Text style={tw`text-2xl text-gray-700`}>SignUp</Text>
-      </View>
+        <View>
+          <Text style={tw`text-2xl text-gray-700`}>SignUp</Text>
+        </View>
 
-      {error && (
-        <Text
-          style={tw`text-black p-3 bg-red-200 w-full text-center text-md m-1`}
+        {error && (
+          <Text
+            style={tw`text-black p-3 bg-red-200 w-full text-center text-md m-1`}
+          >
+            {error}
+          </Text>
+        )}
+        <TextInput
+          placeholder="Email"
+          style={tw`border border-gray-400 bg-gray-100 p-3 m-1 w-full rounded-md`}
+          value={email}
+          onChangeText={(e) => setEmail(e)}
+        />
+        <TextInput
+          placeholder="Password"
+          style={tw`border border-gray-400 bg-gray-100 p-3 m-1 w-full rounded-md`}
+          secureTextEntry={true}
+          value={password}
+          onChangeText={(e) => setPassword(e)}
+        />
+        <TouchableOpacity
+          style={tw`p-3 bg-orange-300 m-1 rounded-md`}
+          onPress={() => signUpWithEmail()}
         >
-          {error}
-        </Text>
-      )}
-      <TextInput
-        placeholder="Email"
-        style={tw`border border-gray-400 bg-gray-100 p-3 m-1 w-full rounded-md`}
-        value={email}
-        onChangeText={(e) => setEmail(e)}
-      />
-      <TextInput
-        placeholder="Password"
-        style={tw`border border-gray-400 bg-gray-100 p-3 m-1 w-full rounded-md`}
-        secureTextEntry={true}
-        value={password}
-        onChangeText={(e) => setPassword(e)}
-      />
-      <TouchableOpacity
-        style={tw`p-3 bg-red-200 m-1 rounded-md`}
-        onPress={() => signUpWithEmail()}
-      >
-        <Text>SignUp</Text>
-      </TouchableOpacity>
-    </View>
+          <Text>SignUp</Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
   );
 };
 
