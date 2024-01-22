@@ -29,9 +29,9 @@ const SignIn = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://192.168.0.101:8000/api/token/",
+        "http://192.168.1.7:8000/user/login/",
         {
-          username: email,
+          email: email,
           password: password,
         },
         {
@@ -41,8 +41,8 @@ const SignIn = () => {
         }
       );
 
-      // console.log("Access Token:", response.data.access);
-      setToken(response.data.access);
+      console.log("Access Token:", response.data.token);
+      setToken(response.data.token);
       setLoading(false);
       navigation.navigate("Home");
 
