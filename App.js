@@ -1,6 +1,7 @@
 import tw from "twrnc";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { AuthProvider } from "./config/AuthContext";
 import SignIn from "./screens/SignIn";
 import SignUp from "./screens/SignUp";
 import ResetPassword from "./screens/ResetPassword";
@@ -10,11 +11,12 @@ const Stack = createStackNavigator();
 
 export default function App() {
   return (
+    <AuthProvider>
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Login" component={SignIn} options={{headerShown: false}}/>
+      <Stack.Screen name="Login" component={SignIn} options={{headerShown: false}}/>
         <Stack.Screen name="SignUp" component={SignUp} />
-        <Stack.Screen name="ResetPassword" component={ResetPassword} />
+        <Stack.Screen name="ResetPassword" component={ResetPassword} /> 
 
         <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
 
@@ -23,5 +25,7 @@ export default function App() {
     <Stack.Screen name="Settings" component={Settings} /> */}
       </Stack.Navigator>
     </NavigationContainer>
+    </AuthProvider>
+
   );
 }

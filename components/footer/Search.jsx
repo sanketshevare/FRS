@@ -13,27 +13,52 @@ import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import tw from "twrnc";
 import { Ionicons } from "@expo/vector-icons";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { useAuth } from "../../config/AuthContext";
+import { A } from "@expo/html-elements";
 
 const Search = () => {
   const [image, setImage] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
+  const [explainations, setExplainations] = useState([]);
+  const [textExplainations, setTextExplainations] = useState([]);
+
+  const [metadata, setMetadata] = useState({});
+
   const [loading, setLoading] = useState(false);
 
+  const auth = getAuth();
+  const { accessToken } = useAuth();
 
-  useEffect( ()=> {
-    if(image == null){
-      setInterval( () => {
+  // console.log("MYTOKEN: " + accessToken);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        // User is logged in
+        // navigation.navigate("Home");
         setRecommendations([]);
-      }, 50000)
-    }
-  },[image])
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // useEffect( ()=> {
+  //   if(image == null){
+  //     setInterval( () => {
+  //       setRecommendations([]);
+  //     }, 50000)
+  //   }
+  // },[image])
+
   const pickImage = async () => {
     setLoading(true);
 
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
+      allowsEditing: false,
+      // aspect: [4, 3],
       quality: 1,
     });
 
@@ -57,15 +82,23 @@ const Search = () => {
 
     try {
       const response = await axios.post(
-        "http://192.168.1.2:5000/recommend",
+        // "http://64.227.147.139:8000/api/recommend",
+        // "http://192.168.1.7:8000/api/recommend",
+        "http://192.168.1.7:8000/api/recommend",
+
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: "JWT " + accessToken,
           },
         }
       );
-      console.log(response.data.recommendations);
+      // console.log(response.data.metadata);
+      setTextExplainations(response.data.explanations);
+      console.log("metadata", textExplainations);
+
+      setMetadata(response.data.metadata);
       setRecommendations(response.data.recommendations);
     } catch (error) {
       console.error("Error fetching recommendations:", error);
@@ -78,26 +111,24 @@ const Search = () => {
     return `data:image/png;base64,${base64String}`;
   }
 
+  // const decodedExplaination = decodeBase64Image(
+  //   textExplainations[0].explanation_encoded_image
+  // );
   const decodedImages = recommendations.map(decodeBase64Image);
 
+  // console.log("decodedExplaination" + decodedExplaination);
+
   return (
-    <ScrollView style={tw`h-full bg-red-200 top-8`}>
-   
-
-      <View style={tw`z-10 top-40`}>
-        {loading && <ActivityIndicator size="large" color="#000000" />}
-      </View>
-
-      
-      <View style={tw`flex items-center justify-center h-full `}>
-      <Text
-        style={tw`text-lg mb-auto font-bold text-center bg-blue-200 w-full`}
-      >
-        Search Product
-      </Text>
+    <ScrollView style={tw`h-full top-4 w-full mb-10 `}>
+      <View style={tw`flex items-center justify-center h-full`}>
+        <Text
+          style={tw`text-lg font-bold text-center bg-blue-200 w-full h-8 p-1`}
+        >
+          Search Product
+        </Text>
         {image == null ? (
           <View
-            style={tw`items-center justify-center bg-slate-300 w-full h-60`}
+            style={tw`items-center justify-center bg-slate-300 w-full h-60 `}
           >
             <TouchableOpacity style={tw`items-center`}>
               <Ionicons
@@ -111,12 +142,20 @@ const Search = () => {
             {/* <Button title="Pick an image from gallery" onPress={pickImage} /> */}
           </View>
         ) : (
-          <ImageBackground source={{ uri: image }} style={tw`w-full h-60`}>
+          <ImageBackground
+            source={{ uri: image }}
+            style={tw`w-full h-100`}
+            resizeMode="cover"
+          >
             <TouchableOpacity
               style={tw`p-3 pt-1 ml-auto`}
               onPress={() => setImage(null)}
             >
-              <Ionicons name={"close-circle-outline"} color={"white"} size={40} />
+              <Ionicons
+                name={"close-circle-outline"}
+                color={"black"}
+                size={40}
+              />
             </TouchableOpacity>
           </ImageBackground>
         )}
@@ -126,15 +165,117 @@ const Search = () => {
             style={tw`bg-blue-300 p-3 w-1/2 m-3 rounded-lg items-center justify-center`}
             onPress={getRecommendations}
           >
-            <Text style={tw`font-bold`}>Recommend Me</Text>
+            {loading == true ? (
+              <View>
+                <ActivityIndicator size="small" color="#000000" />
+                <Text>This will take a moment...</Text>
+              </View>
+            ) : (
+              <Text style={tw`font-bold`}>Recommend Me</Text>
+            )}
           </TouchableOpacity>
         )}
-        {recommendations.length > 0 && (
-          <View style={tw`flex gap-2`}>
-            {/* <Text>Top 5 Recommendations:</Text> */}
+
+        {recommendations.length > 0 ? (
+          <View style={tw`h-screen`}>
+            <Text style={tw`text-center text-lg`}>Your Recommendations:</Text>
+
             {decodedImages.map((rec, index) => (
-              <Image key={index} source={{ uri: rec }} style={tw`h-54 w-50`} />
+              <View
+                key={index}
+                style={tw`mb-2 border-gray-200 shadow-sm w-100`}
+              >
+                <Image
+                  source={{ uri: rec }}
+                  style={tw`w-full h-60  `}
+                  resizeMode="contain"
+                />
+
+                {metadata && metadata[index] && (
+                  <View style={tw`p-2 bg-slate-300`}>
+                    <Text style={tw`text-xl font-600 pl-1`}>
+                      {metadata[index].product_name}
+                    </Text>
+                    <Text style={tw`text-lg font-500 pl-1`}>
+                      {metadata[index].brand}{" "}
+                    </Text>
+
+                    {metadata[index].currency && (
+                      <Text style={tw`text-lg font-500 pl-1`}>
+                        Retail Price: {metadata[index].sales_price}{" "}
+                        {metadata[index].currency}{" "}
+                      </Text>
+                    )}
+                    {metadata[index].discount_percentage && (
+                      <Text style={tw`text-base font-500 pl-1`}>
+                        Discounted Price:
+                        {metadata[index].discount_percentage} OFF
+                      </Text>
+                    )}
+
+                    {metadata[index].colour && (
+                      <Text style={tw`text-base font-500 pl-1`}>
+                        Colours:
+                        {metadata[index].colour}
+                      </Text>
+                    )}
+                  </View>
+                )}
+
+                {/* <Image
+                  source={{ uri: decodedExplaination }}
+                  style={tw`w-full h-60  `}
+                  resizeMode="contain"
+                /> */}
+
+                {textExplainations && textExplainations[index] && (
+                  <View style={tw`p-3 bg-slate-300`}>
+                    <Text
+                      style={tw`text-center text-gray-800 font-bold text-lg`}
+                    >
+                      Explainantions
+                    </Text>
+                    <Text style={tw`text-base text-gray-700 font-bold p-0.5`}>
+                      Product {index + 1} (Label:{" "}
+                      {textExplainations[index].label} ):
+                      {metadata && metadata[index] && (
+                        <Text>{metadata[index].product_name}</Text>
+                      )}
+                    </Text>
+
+                    <Text
+                      style={tw`text-base font-bold text-gray-600 text-justify p-0.5`}
+                    >
+                      We recommend these product because this belong to the '
+                      {metadata && metadata[index] && (
+                        <Text>{metadata[index].product_name}</Text>
+                      )}
+                      ' category (Label: {textExplainations[index].label}). The
+                      recommendation is influenced by various factors, and one
+                      important aspect is a specific feature represented by the
+                      local prediction shape of approximately{" "}
+                      {textExplainations[index].local_pred_shape}
+                    </Text>
+                    <A
+                      href={metadata[index].product_url}
+                      style={tw`p-3 bg-orange-400 w-full text-center rounded-md items-center justify-center`}
+                    >
+                      <TouchableOpacity>
+                        <Text style={tw`text-white text-center font-bold`}>
+                          View Product
+                        </Text>
+                      </TouchableOpacity>
+                    </A>
+                  </View>
+                )}
+              </View>
             ))}
+          </View>
+        ) : (
+          <View style={tw`flex items-center justify-center h-100`}>
+            <Text style={tw`text-gray-400`}>
+              Your Recommendations will appear here!
+            </Text>
           </View>
         )}
       </View>
