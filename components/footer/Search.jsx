@@ -84,7 +84,7 @@ const Search = () => {
       const response = await axios.post(
         // "http://64.227.147.139:8000/api/recommend",
         // "http://192.168.1.7:8000/api/recommend",
-        "http://192.168.1.7:8000/api/recommend",
+        "http://192.168.0.101:8000/api/recommend",
 
         formData,
         {
@@ -119,13 +119,12 @@ const Search = () => {
   // console.log("decodedExplaination" + decodedExplaination);
 
   return (
-    <ScrollView style={tw`h-full top-4 w-full mb-10 `}>
+    <ScrollView style={tw`h-full  w-full  `}>
       <View style={tw`flex items-center justify-center h-full`}>
         <Text
-          style={tw`text-lg font-bold text-center bg-blue-200 w-full h-8 p-1`}
-        >
-          Search Product
-        </Text>
+          style={tw`text-lg font-bold text-center bg-blue-200 w-full pt-3`}
+        ></Text>
+        <Text style={tw`text-2xl font-bold text-center bg-blue-200 w-full`}> Search Product</Text>
         {image == null ? (
           <View
             style={tw`items-center justify-center bg-slate-300 w-full h-60 `}
@@ -153,7 +152,7 @@ const Search = () => {
             >
               <Ionicons
                 name={"close-circle-outline"}
-                color={"black"}
+                color={"red"}
                 size={40}
               />
             </TouchableOpacity>
@@ -171,7 +170,7 @@ const Search = () => {
                 <Text>This will take a moment...</Text>
               </View>
             ) : (
-              <Text style={tw`font-bold`}>Recommend Me</Text>
+              <Text style={tw`font-bold`}>RECOMMEND ME</Text>
             )}
           </TouchableOpacity>
         )}

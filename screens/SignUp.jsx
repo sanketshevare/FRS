@@ -62,7 +62,7 @@ const SignUp = () => {
       }
 
       const response = await axios.post(
-        "http://192.168.1.7:8000/auth/users/",
+        "http://192.168.0.101:8000/auth/users/",
         {
           email: email,
           password: password,
@@ -123,7 +123,7 @@ const SignUp = () => {
         </View>
 
         <View>
-          <Text style={tw`text-2xl text-gray-700`}>SignUp</Text>
+          <Text style={tw`text-2xl text-gray-700`}>REGISTER</Text>
         </View>
 
         {error && (
@@ -188,10 +188,10 @@ const SignUp = () => {
         />
 
         <TouchableOpacity
-          style={tw`p-3 bg-orange-300 m-1 rounded-md`}
+          style={tw`p-3 bg-orange-300 m-1 rounded-md w-1/4`}
           onPress={signUpWithEmail}
         >
-          <Text>SignUp</Text>
+          <Text style={tw`text-center text-md font-bold`}>REGISTER</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>

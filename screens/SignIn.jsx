@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import tw from "twrnc";
 import { useNavigation } from "@react-navigation/native";
-import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { app, auth } from "../firebase"; // Import the app from the firebase.js file
 import { CommonActions } from "@react-navigation/native";
 import axios from "axios";
@@ -29,7 +28,7 @@ const SignIn = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://192.168.1.7:8000/user/login/",
+        "http://192.168.0.101:8000/user/login/",
         {
           email: email,
           password: password,
@@ -75,7 +74,7 @@ const SignIn = () => {
           {loading && <ActivityIndicator size="large" color="#000000" />}
         </View>
         <View>
-          <Text style={tw`text-2xl text-gray-700`}>SignIn</Text>
+          <Text style={tw`text-2xl text-gray-700`}>SIGN IN</Text>
         </View>
         {error && (
           <Text
@@ -105,17 +104,17 @@ const SignIn = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={tw`p-3 bg-blue-200 m-1 rounded-md`}
+          style={tw`p-3 bg-blue-200 m-1 rounded-md w-1/4`}
           onPress={() => handleLogin()}
         >
-          <Text>SignIn</Text>
+          <Text style={tw`text-center text-md font-bold`}>LOGIN</Text>
         </TouchableOpacity>
         <Text>Don't have an account yet?</Text>
         <TouchableOpacity
-          style={tw`p-3 bg-blue-200 m-1 rounded-md`}
+          style={tw`p-3 bg-blue-200 m-1 rounded-md w-1/4`}
           onPress={() => navigation.navigate("SignUp")}
         >
-          <Text>SignUp</Text>
+          <Text style={tw`text-center text-md font-bold`}>SIGNUP</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>

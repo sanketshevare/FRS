@@ -44,11 +44,11 @@ const Home = () => {
 
   return (
     <>
-      <View
+      {/* <View
         style={tw`w-full bg-blue-100 h-15 shadow-lg justify-center sticky z-10 top-5`}
       >
         <Text style={tw`text-slate-800 font-bold text-2xl p-3`}>FRS</Text>
-      </View>
+      </View> */}
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {

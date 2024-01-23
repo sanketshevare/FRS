@@ -37,7 +37,7 @@ const ResetPassword = () => {
       }
 
       await axios.post(
-        "http://192.168.1.7:8000/auth/users/reset_password/",
+        "http://192.168.0.101:8000/auth/users/reset_password/",
         {
           email: email,
         },
@@ -89,7 +89,7 @@ const ResetPassword = () => {
         <View style={tw`z-10 top-40`}>
           {loading && <ActivityIndicator size="large" color="#000000" />}
         </View>
-        <Text style={tw`text-lg`}>Reset Your Password</Text>
+        <Text style={tw`text-lg`}>RESET YOUR PASSWORD</Text>
 
         {error && (
           <Text
@@ -109,7 +109,7 @@ const ResetPassword = () => {
           style={tw`p-3 bg-gray-300 m-1 rounded-md`}
           onPress={handleForgotPassword}
         >
-          <Text>Get Reset Link</Text>
+          <Text style={tw`text-center text-md font-bold`}>GET RESET LINK</Text>
         </TouchableOpacity>
       </View>
     </ImageBackground>

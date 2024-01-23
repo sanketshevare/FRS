@@ -119,7 +119,7 @@ const Splash = () => {
 
   const _renderItem = ({ item }) => {
     return (
-      <View style={tw`flex items-center right-10 top-4`}>
+      <View style={tw`flex items-center right-10`}>
         <Image
           source={{ uri: item.imageUrl }}
           style={tw`h-80 aspect-video w-100`}
@@ -147,86 +147,120 @@ const Splash = () => {
           />
         </View>
 
-        <View style={tw`z-100 absolute top-98`}>
+        {/* <View style={tw`z-100 absolute top-98`}>
           {loading && <ActivityIndicator size="xl" color="#fff" />}
-        </View>
-        <Text
-          style={tw`text-center text-lg text-slate-700 p-1 bg-red-100 w-full`}
-        >
-          Browse Events By City
-        </Text>
-        <View style={tw`flex flex-row text-white p-3 bg-gray-600`}>
-          <RNPickerSelect
-            placeholder={placeholder}
-            items={[
-              { label: "London", value: "london" },
-              // { label: "Miami", value: "miami" },
-              { label: "Chicago", value: "chicago" },
-            ]}
-            onValueChange={(value) => setSelectedCity(value)}
-            useNativeAndroidPickerStyle={false}
-            value={selectedCity || "london"}
-            style={{
-              inputIOS: {
-                color: "white",
-                width: 400,
-                textAlign: "center",
-                padding: 12,
-                fontSize: 25,
-              },
-              inputAndroid: {
-                color: "white",
-                width: 400,
-                textAlign: "center",
-                fontSize: 20,
-              },
-            }}
-          />
-
-          <Text style={tw`w-1/4`}>
-            <Ionicons name={"caret-down-outline"} size={30} color={"white"} />
-          </Text>
-        </View>
-
-        <View style={tw`h-auto w-full `}>
-          {blogs.map((blog, index) => (
-            <View key={index}>
-              <View style={tw`w-full p-2 bg-gray-900 `}>
-                <Text style={tw`text-center text-lg font-bold text-white`}>
-                  {blog.event_name}
-                </Text>
-
-                <Image
-                  source={{ uri: blog.event_card_url }}
-                  style={tw`h-70 w-100`}
+        </View> */}
+        {loading == false ? (
+          <View style={tw`w-full flex`}>
+            <Text
+              style={tw`text-center text-lg text-slate-700 p-1 bg-red-100 w-full`}
+            >
+              Browse Events By City 
+            </Text>
+            <View style={tw` flex-row text-white   p-3 bg-gray-600`}>
+            <Text style={tw``}>
+                <Ionicons
+                  name={"caret-down-outline"}
+                  size={30}
+                  color={"white"}
                 />
+              </Text>
+              <RNPickerSelect
+                placeholder={placeholder}
+                items={[
+                  { label: "London", value: "london" },
+                  // { label: "Miami", value: "miami" },
+                  { label: "Chicago", value: "chicago" },
+                ]}
+                onValueChange={(value) => setSelectedCity(value)}
+                useNativeAndroidPickerStyle={false}
+                value={selectedCity || "london"}
+                style={{
+                  inputIOS: {
+                    color: "white",
+                    width: 400,
+                    textAlign: "center",
+                    padding: 12,
+                    fontSize: 25,
+                  },
+                  inputAndroid: {
+                    color: "white",
+                    width: 400,
+                    textAlign: "center",
+                    fontSize: 20,
+                  },
+                }}
+              />
 
-                <Text style={tw` text-justify text-md text-white`}>
-                  {blog.summary}
-                </Text>
-
-                <Text style={tw` text-justify text-md text-white`}>
-                  <Text style={tw`font-bold`}>Address:</Text>{" "}
-                  {blog.formatted_address}
-                </Text>
-
-                <Text style={tw` text-justify text-md text-white`}>
-                  <Text style={tw`font-bold`}>Views: </Text>{" "}
-                  {blog.page_views_total}
-                  {"                                   "}
-                  <Text style={tw`font-bold`}>Start Date:</Text>{" "}
-                  {blog.start_date}
-                </Text>
-
-                <Text style={tw` text-md text-white`}>
-                  <Text style={tw`font-bold`}>Visit Us:</Text>{" "}
-                  <A href={blog.persona.url}>{blog.persona.url}</A>
-                </Text>
-              </View>
-              <View style={tw`mb-px w-full bg-gray-100`} />
+             
             </View>
-          ))}
-        </View>
+            <View style={tw`h-auto w-full `}>
+              {blogs.map((blog, index) => (
+                <View key={index}>
+                  <View style={tw`w-full p-2 bg-gray-900 `}>
+                    <Text style={tw`text-center text-lg font-bold text-white`}>
+                      {blog.event_name}
+                    </Text>
+
+                    <Image
+                      source={{ uri: blog.event_card_url }}
+                      style={tw`h-70 w-100`}
+                    />
+
+                    <Text style={tw` text-justify text-md text-white`}>
+                      {blog.summary}
+                    </Text>
+
+                    <Text style={tw` text-justify text-md text-white`}>
+                      <Text style={tw`font-bold`}>Address:</Text>{" "}
+                      {blog.formatted_address}
+                    </Text>
+
+                    <Text style={tw` text-justify text-md text-white`}>
+                      <Text style={tw`font-bold`}>Views: </Text>{" "}
+                      {blog.page_views_total}
+                      {"                                   "}
+                      <Text style={tw`font-bold`}>Start Date:</Text>{" "}
+                      {blog.start_date}
+                    </Text>
+
+                    <Text style={tw` text-md text-white`}>
+                      <Text style={tw`font-bold`}>Visit Us:</Text>{" "}
+                      <A href={blog.persona.url}>{blog.persona.url}</A>
+                    </Text>
+                  </View>
+                  <View style={tw`mb-px w-full bg-gray-100`} />
+                </View>
+              ))}
+            </View>
+          </View>
+        ) : (
+          <View
+            style={tw`w-full mx-auto bg-white shadow-md rounded-md overflow-hidden`}
+          >
+            <View
+              style={tw`h-4 bg-gray-200 rounded-full dark:bg-gray-700`}
+            ></View>
+
+            <View style={tw` h-70 w-100 bg-gray-300 rounded-md`}></View>
+            <View style={tw`mb-4`}>
+              <View
+                style={tw`w-full border border-gray-200 rounded shadow animate-pulse dark:border-gray-700`}
+              >
+                {/* Your loading content goes here */}
+              </View>
+              <View
+                style={tw`h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5`}
+              ></View>
+              <View
+                style={tw`h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5`}
+              ></View>
+              <View
+                style={tw`h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5`}
+              ></View>
+            </View>
+          </View>
+        )}
       </View>
     </ScrollView>
   );
