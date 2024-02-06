@@ -62,7 +62,7 @@ const SignUp = () => {
       }
 
       const response = await axios.post(
-        "http://192.168.0.101:8000/auth/users/",
+        "http://192.168.0.105:8000/auth/users/",
         {
           email: email,
           password: password,

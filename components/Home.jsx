@@ -58,8 +58,8 @@ const Home = () => {
               iconName = focused ? "ios-search" : "ios-search-outline";
             } else if (route.name === "Buy Coupon") {
               iconName = focused ? "ios-gift" : "ios-gift-outline";
-            } else if (route.name === "Calendar") {
-              iconName = focused ? "ios-calendar" : "ios-calendar-outline";
+            } else if (route.name === "Explore") {
+              iconName = focused ? "color-wand" : "ios-color-wand";
             } else if (route.name === "Home") {
               iconName = focused ? "ios-home" : "ios-home-outline";
             } else if (route.name === "Profile") {
@@ -80,7 +80,7 @@ const Home = () => {
         />
 
         <Tab.Screen
-          name="Calendar"
+          name="Explore"
           component={Calendar}
           options={{ headerShown: false }}
         />

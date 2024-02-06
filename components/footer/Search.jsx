@@ -82,9 +82,7 @@ const Search = () => {
 
     try {
       const response = await axios.post(
-        // "http://64.227.147.139:8000/api/recommend",
-        // "http://192.168.1.7:8000/api/recommend",
-        "http://192.168.0.101:8000/api/recommend",
+        "http://192.168.0.105:8000/api/recommend",
 
         formData,
         {
@@ -136,7 +134,7 @@ const Search = () => {
                 size={90}
                 onPress={pickImage}
               />
-              <Text style={tw`text-md`}>Pick Product Image From Galary</Text>
+              <Text style={tw`text-md`}>Pick Product Image From Gallery</Text>
             </TouchableOpacity>
             {/* <Button title="Pick an image from gallery" onPress={pickImage} /> */}
           </View>

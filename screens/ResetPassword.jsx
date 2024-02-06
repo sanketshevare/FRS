@@ -37,7 +37,7 @@ const ResetPassword = () => {
       }
 
       await axios.post(
-        "http://192.168.0.101:8000/auth/users/reset_password/",
+        "http://192.168.0.105:8000/auth/users/reset_password/",
         {
           email: email,
         },
