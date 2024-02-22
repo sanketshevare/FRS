@@ -10,6 +10,7 @@ import { useAuth } from "../../config/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 import Settings from "./Settings";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import Wishlist from "./Wishlist";
 
 const ProfileScreen = ({ userData }) => {
   const [loading, setLoading] = useState(false);
@@ -250,7 +251,9 @@ const Profile = () => {
           </View>
         )}
       </Drawer.Screen>
+      <Drawer.Screen name="Wishlist" component={Wishlist} />
       <Drawer.Screen name="Settings" component={Settings} />
+
     </Drawer.Navigator>
   );
 };
@@ -260,6 +263,8 @@ const DrawerNavigator = () => {
   return (
     <Drawer.Navigator>
       <Drawer.Screen name="Settings" component={Settings} />
+      <Drawer.Screen name="Wishlist" component={Wishlist} />
+
     </Drawer.Navigator>
   );
 };

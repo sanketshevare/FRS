@@ -31,7 +31,7 @@ const Calendar = () => {
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       setImage(result.assets[0].uri);
       setLoading(false);
     } else {
@@ -54,17 +54,17 @@ const Calendar = () => {
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             // Authorization: "JWT " + accessToken,
-            "x-api-key":
-              "d40e781ada58a44d6944452c28879c2741115993f751cb8fd2baae68feb49f80",
+            "x-api-key": "dd23e965b85964d6e94c54896e9ea6d78c3d7b31f310e1807fb1ab897ac63ca5",
+            "Content-Type": "multipart/form-data",
+
           },
         }
       );
       console.log(response.data.data);
       setTagData(response.data.data);
     } catch (error) {
-      console.error(error);
+      console.error(error.response);
     } finally {
       setLoading(false);
     }
@@ -133,7 +133,9 @@ const Calendar = () => {
             <View
               style={tw`p-3 bg-red-200 w-full border border-black rounded mb-1`}
             >
-              <Text style={tw`text-base mb-1 font-bold`}>Colors found in image:</Text>
+              <Text style={tw`text-base mb-1 font-bold`}>
+                Colors found in image:
+              </Text>
               {tagData.colors.map((color, index) => (
                 <View style={tw`flex flex-row`} key={index}>
                   <Text
@@ -153,7 +155,9 @@ const Calendar = () => {
             <View
               style={tw`p-3 bg-gray-200 w-full border border-black rounded mb-1`}
             >
-              <Text style={tw`text-base mb-1 font-bold`}>Item/s present in image:</Text>
+              <Text style={tw`text-base mb-1 font-bold`}>
+                Item/s present in image:
+              </Text>
               {tagData.items.map((item, index) =>
                 item.category === "clothing" ? (
                   <View style={tw`p-1`} key={index}>
@@ -179,10 +183,16 @@ const Calendar = () => {
             <View
               style={tw`p-3 bg-blue-200 w-full border border-black rounded`}
             >
-              <Text style={tw`text-base mb-1 font-bold`}>Approximate labels found in image:</Text>
+              <Text style={tw`text-base mb-1 font-bold`}>
+                Approximate labels found in image:
+              </Text>
               {tagData.labels.map((label, index) => (
                 <View style={tw`p-1`} key={index}>
-                  <Text>   <Ionicons name={"star"} color={"gray"} size={13} />{" "}{`Name: ${label.name}, Class: ${label.classification}`}</Text>
+                  <Text>
+                    {" "}
+                    <Ionicons name={"star"} color={"gray"} size={13} />{" "}
+                    {`Name: ${label.name}, Class: ${label.classification}`}
+                  </Text>
                 </View>
               ))}
             </View>

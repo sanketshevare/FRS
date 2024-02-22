@@ -79,11 +79,11 @@ const Home = () => {
           options={{ headerShown: false }}
         />
 
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Explore"
           component={Calendar}
           options={{ headerShown: false }}
-        />
+        /> */}
         <Tab.Screen
           name="Search"
           component={Search}
